@@ -86,7 +86,7 @@ export default function Home() {
 
     const phoneRegex = /^010-\d{4}-\d{4}$/;
     if (!phoneRegex.test(formData.phone)) {
-      alert("핸드폰 번호를 다시 확인해 주세요. (010으로 시작하는 11자리 숫자)");
+      alert("핸드폰 번호를 다시 확인해 주세요.");
       return;
     }
 
@@ -218,7 +218,7 @@ export default function Home() {
         <div className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 md:p-12 border border-gray-100/50">
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">참가 신청</h2>
-            <p className="text-gray-500">아래 정보를 입력하여 행사 참가를 신청해 주세요.</p>
+            <p className="text-gray-500">아래 정보를 입력하여 참가를 신청해 주세요.</p>
           </div>
 
           {status === "before" && (
