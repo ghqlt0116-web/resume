@@ -84,6 +84,12 @@ export default function Home() {
       return;
     }
 
+    const phoneRegex = /^010-\d{4}-\d{4}$/;
+    if (!phoneRegex.test(formData.phone)) {
+      alert("핸드폰 번호를 다시 확인해 주세요. (010으로 시작하는 11자리 숫자)");
+      return;
+    }
+
     setSubmitting(true);
     try {
       const res = await fetch("/api/register", {
