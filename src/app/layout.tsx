@@ -9,10 +9,10 @@ const notoSansKr = Noto_Sans_KR({
 });
 
 export const metadata: Metadata = {
-  title: "SK브로드밴드 기자 설명회 참석 신청",
+  title: "SK브로드밴드 'B tv 신규 서비스' 기자설명회 참가 신청",
   description: "SK브로드밴드 신규 서비스 기자 설명회 참석 신청 페이지입니다.",
   openGraph: {
-    title: "SK브로드밴드 기자 설명회 참석 신청",
+    title: "SK브로드밴드 'B tv 신규 서비스' 기자설명회 참가 신청",
     description: "SK브로드밴드 신규 서비스 기자 설명회 참석 신청 페이지입니다.",
     siteName: "SK브로드밴드",
     locale: "ko_KR",
