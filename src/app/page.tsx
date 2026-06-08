@@ -119,10 +119,10 @@ export default function Home() {
 
       <main className="flex-1 w-full max-w-5xl mx-auto p-4 md:p-8 grid md:grid-cols-2 gap-8 items-start mt-4 md:mt-12">
         {/* Left Column: Event Details */}
-        <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12 border border-gray-100/50 relative overflow-hidden">
+        <div className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 md:p-12 border border-gray-100/50 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#ea002c] to-[#f96025]"></div>
           
-          <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-6 leading-tight whitespace-pre-wrap flex items-center flex-wrap gap-2">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 mb-6 leading-tight whitespace-pre-wrap break-keep flex items-center flex-wrap gap-2">
             <img src="/btv-logo.png" alt="B tv" className="h-10 object-contain inline-block -mt-1" onError={(e) => {
               e.currentTarget.style.display = 'none';
               e.currentTarget.nextElementSibling?.classList.remove('hidden');
@@ -131,7 +131,7 @@ export default function Home() {
             신규 서비스 기자 설명회
           </h1>
           
-          <p className="text-gray-600 text-lg leading-relaxed mb-10 whitespace-pre-wrap">
+          <p className="text-gray-600 text-base md:text-lg leading-relaxed mb-10 whitespace-pre-wrap break-keep">
             {settings.EventIntro}
           </p>
 
@@ -153,15 +153,15 @@ export default function Home() {
               const title = titleMatch ? titleMatch[1] : '안내';
               const contentFirstLine = firstLine.replace(/^(일시|장소|주관|안내)\s*:\s*/, '');
               
-              let content = <p className="text-gray-900 font-medium text-lg">{contentFirstLine}</p>;
+              let content = <p className="text-gray-900 font-medium text-base md:text-lg break-keep">{contentFirstLine}</p>;
               
               if (isLocation) {
                 const parts = contentFirstLine.split('(');
                 if (parts.length > 1) {
                   content = (
                     <>
-                      <p className="text-gray-900 font-medium text-lg">{parts[0].trim()}</p>
-                      <p className="text-gray-500 text-sm mt-1 break-keep">({parts.slice(1).join('(')}</p>
+                      <p className="text-gray-900 font-medium text-base md:text-lg break-keep">{parts[0].trim()}</p>
+                      <p className="text-gray-500 text-sm md:text-base mt-1 break-keep">({parts.slice(1).join('(')}</p>
                     </>
                   );
                 }
@@ -176,7 +176,7 @@ export default function Home() {
                     <h3 className="text-sm font-semibold text-gray-500 mb-1">{title}</h3>
                     {content}
                     {lines.slice(1).map((line, j) => (
-                      <p key={j} className={`text-gray-900 ${isHost ? 'font-medium text-lg' : 'text-gray-500 text-sm'} mt-1`}>{line}</p>
+                      <p key={j} className={`text-gray-900 ${isHost ? 'font-medium text-base md:text-lg' : 'text-gray-500 text-sm md:text-base'} mt-1 break-keep`}>{line}</p>
                     ))}
                   </div>
                 </div>
@@ -186,7 +186,7 @@ export default function Home() {
         </div>
 
         {/* Right Column: Registration Form */}
-        <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12 border border-gray-100/50">
+        <div className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 md:p-12 border border-gray-100/50">
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">참석 신청</h2>
             <p className="text-gray-500">아래 정보를 입력하여 행사 참석을 신청해 주세요.</p>
