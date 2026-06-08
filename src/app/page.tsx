@@ -208,7 +208,7 @@ export default function Home() {
             <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 text-center">
               <Clock className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-bold text-gray-700 mb-2">신청 대기 중</h3>
-              <p className="text-gray-500 mb-2">아직 신청 기간이 아닙니다.</p>
+              <p className="text-gray-500 mb-2 break-keep">아직 신청 기간이 아닙니다.</p>
               <p className="text-sm font-medium text-[#ea002c] bg-red-50 inline-block px-4 py-2 rounded-full mt-2">
                 오픈: {settings.OpenTimeKST}
               </p>
@@ -219,7 +219,7 @@ export default function Home() {
             <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 text-center">
               <Clock className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-bold text-gray-700 mb-2">신청 마감</h3>
-              <p className="text-gray-500">참가 신청 기한이 지났습니다.<br/>관심 가져주셔서 감사합니다.</p>
+              <p className="text-gray-500 break-keep">참가 신청 기한이 지났습니다.<br/>관심 가져주셔서 감사합니다.</p>
             </div>
           )}
 
@@ -227,7 +227,10 @@ export default function Home() {
             <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 text-center">
               <User className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-bold text-gray-700 mb-2">정원 초과 마감</h3>
-              <p className="text-gray-500">선착순 인원이 모두 차서 접수가 마감되었습니다.<br/>성원에 감사드립니다.</p>
+              <p className="text-gray-500 break-keep">
+                신청 가능 인원이 초과되어 접수가 마감되었습니다.<br/>
+                추가 문의는 SK브로드밴드 PR실로 부탁드립니다.
+              </p>
             </div>
           )}
 
