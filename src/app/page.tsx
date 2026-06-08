@@ -136,17 +136,48 @@ export default function Home() {
           </p>
 
           <div className="space-y-6">
-            {settings.EventSchedule.split('\n').map((line, i) => {
-              const isDate = line.includes('일시');
-              const isLocation = line.includes('장소');
+            {settings.EventSchedule.split('\n').reduce((acc, line) => {
+              if (line.match(/^(일시|장소|주관|안내)\s*:/)) {
+                acc.push([line]);
+              } else if (acc.length > 0) {
+                acc[acc.length - 1].push(line);
+              }
+              return acc;
+            }, [] as string[][]).map((lines, i) => {
+              const firstLine = lines[0];
+              const isDate = firstLine.includes('일시');
+              const isLocation = firstLine.includes('장소');
+              const isHost = firstLine.includes('주관');
+              
+              const titleMatch = firstLine.match(/^(일시|장소|주관|안내)\s*:\s*/);
+              const title = titleMatch ? titleMatch[1] : '안내';
+              const contentFirstLine = firstLine.replace(/^(일시|장소|주관|안내)\s*:\s*/, '');
+              
+              let content = <p className="text-gray-900 font-medium text-lg">{contentFirstLine}</p>;
+              
+              if (isLocation) {
+                const parts = contentFirstLine.split('(');
+                if (parts.length > 1) {
+                  content = (
+                    <>
+                      <p className="text-gray-900 font-medium text-lg">{parts[0].trim()}</p>
+                      <p className="text-gray-500 text-sm mt-1 break-keep">({parts.slice(1).join('(')}</p>
+                    </>
+                  );
+                }
+              }
+
               return (
                 <div key={i} className="flex items-start gap-4">
                   <div className="mt-1 p-3 bg-red-50 rounded-2xl text-[#ea002c]">
-                    {isDate ? <Calendar className="w-6 h-6" /> : isLocation ? <MapPin className="w-6 h-6" /> : <Clock className="w-6 h-6" />}
+                    {isDate ? <Calendar className="w-6 h-6" /> : isLocation ? <MapPin className="w-6 h-6" /> : isHost ? <Building className="w-6 h-6" /> : <Clock className="w-6 h-6" />}
                   </div>
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-500 mb-1">{isDate ? '일시' : isLocation ? '장소' : '안내'}</h3>
-                    <p className="text-gray-900 font-medium text-lg">{line.replace(/^(일시|장소|안내):\s*/, '')}</p>
+                    <h3 className="text-sm font-semibold text-gray-500 mb-1">{title}</h3>
+                    {content}
+                    {lines.slice(1).map((line, j) => (
+                      <p key={j} className={`text-gray-900 ${isHost ? 'font-medium text-lg' : 'text-gray-500 text-sm'} mt-1`}>{line}</p>
+                    ))}
                   </div>
                 </div>
               );
@@ -275,7 +306,7 @@ export default function Home() {
       </main>
 
       <footer className="mt-auto py-8 text-center text-gray-400 text-sm">
-        <p>© {new Date().getFullYear()} SK Broadband Co., Ltd. All rights reserved.</p>
+        <p>COPYRIGHT © SK BROADBAND CO., LTD. ALL RIGHTS RESERVED.</p>
       </footer>
     </div>
   );
