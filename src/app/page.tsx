@@ -1,65 +1,264 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect, useState } from "react";
+import { Calendar, Clock, MapPin, User, Building, Phone, Send, Loader2 } from "lucide-react";
+
+type EventSettings = {
+  EventName: string;
+  EventIntro: string;
+  EventSchedule: string;
+  OpenTimeKST: string;
+  CloseTimeKST: string;
+};
 
 export default function Home() {
+  const [settings, setSettings] = useState<EventSettings | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [status, setStatus] = useState<"loading" | "before" | "active" | "after">("loading");
+
+  const [formData, setFormData] = useState({ media: "", name: "", phone: "" });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    async function fetchSettings() {
+      try {
+        const res = await fetch("/api/event");
+        const json = await res.json();
+        if (json.success && json.data) {
+          setSettings(json.data);
+          checkTimeStatus(json.data);
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchSettings();
+    
+    // Check time every minute just in case
+    const interval = setInterval(() => {
+      if (settings) checkTimeStatus(settings);
+    }, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const checkTimeStatus = (data: EventSettings) => {
+    const now = new Date();
+    // Convert current local time to KST
+    const currentUtc = now.getTime() + now.getTimezoneOffset() * 60000;
+    const currentKst = new Date(currentUtc + 9 * 60 * 60 * 1000);
+
+    const openTime = new Date(data.OpenTimeKST.replace(/-/g, "/")); // Safari compat
+    const closeTime = new Date(data.CloseTimeKST.replace(/-/g, "/"));
+
+    if (currentKst < openTime) {
+      setStatus("before");
+    } else if (currentKst > closeTime) {
+      setStatus("after");
+    } else {
+      setStatus("active");
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const json = await res.json();
+      if (json.success) {
+        setSubmitted(true);
+      } else {
+        alert("신청 중 오류가 발생했습니다. 다시 시도해주세요.");
+      }
+    } catch (err) {
+      alert("신청 중 오류가 발생했습니다. 다시 시도해주세요.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <Loader2 className="w-8 h-8 text-[#ea002c] animate-spin" />
+      </div>
+    );
+  }
+
+  if (!settings) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 text-gray-500">
+        행사 정보를 불러올 수 없습니다.
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col font-sans">
+      {/* Header */}
+      <header className="bg-white shadow-sm py-4 px-6 md:px-12 flex items-center">
+        {/* SK Broadband Mock Logo */}
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 bg-[#ea002c] rounded-bl-xl rounded-tr-xl"></div>
+          <span className="text-xl font-bold tracking-tighter text-gray-900">
+            SK<span className="text-[#ea002c]">broadband</span>
+          </span>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </header>
+
+      <main className="flex-1 w-full max-w-5xl mx-auto p-4 md:p-8 grid md:grid-cols-2 gap-8 items-start mt-4 md:mt-12">
+        {/* Left Column: Event Details */}
+        <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12 border border-gray-100/50 relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#ea002c] to-[#f96025]"></div>
+          
+          <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-6 leading-tight whitespace-pre-wrap">
+            {settings.EventName}
+          </h1>
+          
+          <p className="text-gray-600 text-lg leading-relaxed mb-10 whitespace-pre-wrap">
+            {settings.EventIntro}
+          </p>
+
+          <div className="space-y-6">
+            {settings.EventSchedule.split('\n').map((line, i) => {
+              const isDate = line.includes('일시');
+              const isLocation = line.includes('장소');
+              return (
+                <div key={i} className="flex items-start gap-4">
+                  <div className="mt-1 p-3 bg-red-50 rounded-2xl text-[#ea002c]">
+                    {isDate ? <Calendar className="w-6 h-6" /> : isLocation ? <MapPin className="w-6 h-6" /> : <Clock className="w-6 h-6" />}
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-gray-500 mb-1">{isDate ? '일시' : isLocation ? '장소' : '안내'}</h3>
+                    <p className="text-gray-900 font-medium text-lg">{line.replace(/^(일시|장소|안내):\s*/, '')}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Right Column: Registration Form */}
+        <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12 border border-gray-100/50">
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">참석 신청</h2>
+            <p className="text-gray-500">아래 정보를 입력하여 행사 참석을 신청해 주세요.</p>
+          </div>
+
+          {status === "before" && (
+            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 text-center">
+              <Clock className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-xl font-bold text-gray-700 mb-2">신청 대기 중</h3>
+              <p className="text-gray-500 mb-2">아직 신청 기간이 아닙니다.</p>
+              <p className="text-sm font-medium text-[#ea002c] bg-red-50 inline-block px-4 py-2 rounded-full mt-2">
+                오픈: {settings.OpenTimeKST}
+              </p>
+            </div>
+          )}
+
+          {status === "after" && (
+            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 text-center">
+              <Clock className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-xl font-bold text-gray-700 mb-2">신청 마감</h3>
+              <p className="text-gray-500">참석 신청이 모두 마감되었습니다.<br/>관심 가져주셔서 감사합니다.</p>
+            </div>
+          )}
+
+          {status === "active" && submitted && (
+            <div className="bg-green-50 border border-green-200 rounded-2xl p-8 text-center">
+              <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Send className="w-8 h-8" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">신청 완료</h3>
+              <p className="text-green-700">참석 신청이 성공적으로 접수되었습니다.</p>
+            </div>
+          )}
+
+          {status === "active" && !submitted && (
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 ml-1">매체명</label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
+                    <Building className="w-5 h-5" />
+                  </div>
+                  <input
+                    type="text"
+                    required
+                    value={formData.media}
+                    onChange={(e) => setFormData({ ...formData, media: e.target.value })}
+                    className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#ea002c]/20 focus:border-[#ea002c] transition-all"
+                    placeholder="소속 매체명을 입력하세요"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 ml-1">기자명</label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
+                    <User className="w-5 h-5" />
+                  </div>
+                  <input
+                    type="text"
+                    required
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#ea002c]/20 focus:border-[#ea002c] transition-all"
+                    placeholder="성함을 입력하세요"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 ml-1">핸드폰 번호</label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
+                    <Phone className="w-5 h-5" />
+                  </div>
+                  <input
+                    type="tel"
+                    required
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#ea002c]/20 focus:border-[#ea002c] transition-all"
+                    placeholder="010-0000-0000"
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={submitting}
+                className="w-full py-4 px-6 bg-gradient-to-r from-[#ea002c] to-[#f96025] hover:opacity-90 text-white font-bold rounded-xl shadow-lg shadow-red-500/30 transition-all flex items-center justify-center gap-2 disabled:opacity-70"
+              >
+                {submitting ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    처리 중...
+                  </>
+                ) : (
+                  <>
+                    신청하기
+                    <Send className="w-5 h-5 ml-1" />
+                  </>
+                )}
+              </button>
+            </form>
+          )}
         </div>
       </main>
+
+      <footer className="mt-auto py-8 text-center text-gray-400 text-sm">
+        <p>© {new Date().getFullYear()} SK Broadband Co., Ltd. All rights reserved.</p>
+      </footer>
     </div>
   );
 }
