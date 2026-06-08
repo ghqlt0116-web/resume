@@ -9,8 +9,15 @@ const notoSansKr = Noto_Sans_KR({
 });
 
 export const metadata: Metadata = {
-  title: "SK브로드밴드 프레스 데이 참석 신청",
-  description: "SK브로드밴드 기자 대상 행사 참석 신청 페이지입니다.",
+  title: "SK브로드밴드 기자 설명회 참석 신청",
+  description: "SK브로드밴드 신규 서비스 기자 설명회 참석 신청 페이지입니다.",
+  openGraph: {
+    title: "SK브로드밴드 기자 설명회 참석 신청",
+    description: "SK브로드밴드 신규 서비스 기자 설명회 참석 신청 페이지입니다.",
+    siteName: "SK브로드밴드",
+    locale: "ko_KR",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
