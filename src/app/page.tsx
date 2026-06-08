@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Calendar, Clock, MapPin, User, Building, Phone, Send, Loader2 } from "lucide-react";
+import { Calendar, Clock, MapPin, User, Building, Phone, Mail, Send, Loader2 } from "lucide-react";
 
 type EventSettings = {
   EventName: string;
@@ -18,7 +18,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState<"loading" | "before" | "active" | "after" | "full">("loading");
 
-  const [formData, setFormData] = useState({ media: "", name: "", phone: "" });
+  const [formData, setFormData] = useState({ media: "", name: "", phone: "", email: "" });
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
@@ -73,6 +73,17 @@ export default function Home() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!formData.media || !formData.name || !formData.phone || !formData.email) {
+      alert("모든 정보를 입력해 주세요.");
+      return;
+    }
+
+    if (!formData.email.includes("@")) {
+      alert("올바른 이메일 형식을 입력해 주세요.");
+      return;
+    }
+
     setSubmitting(true);
     try {
       const res = await fetch("/api/register", {
@@ -302,6 +313,22 @@ export default function Home() {
                     }}
                     className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#ea002c]/20 focus:border-[#ea002c] transition-all"
                     placeholder="010-0000-0000"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2 ml-1">이메일</label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Mail className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#ea002c]/20 focus:border-[#ea002c] transition-colors text-gray-900"
+                    placeholder="example@sk.com"
                   />
                 </div>
               </div>

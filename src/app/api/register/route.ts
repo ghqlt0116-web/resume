@@ -4,9 +4,9 @@ import { appendRegistration, getEventSettings, getCurrentRegistrationCount } fro
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { media, name, phone } = body;
+    const { media, name, phone, email } = body;
 
-    if (!media || !name || !phone) {
+    if (!media || !name || !phone || !email) {
       return NextResponse.json(
         { success: false, error: "Missing required fields" },
         { status: 400 }
@@ -34,12 +34,12 @@ export async function POST(req: Request) {
     const timestamp = kstDate.toISOString().replace("T", " ").substring(0, 19);
 
     try {
-      await appendRegistration([timestamp, media, name, phone]);
+      await appendRegistration([timestamp, media, name, phone, email]);
     } catch (e: any) {
       // If missing Google Sheets config, we just mock success
       if (e.message.includes("Missing Google Sheet ID") || e.message.includes("Missing Google Service Account credentials")) {
         console.warn("Google Sheets not configured. Mocking successful submission.");
-        console.log("Submitted Data:", [timestamp, media, name, phone]);
+        console.log("Submitted Data:", [timestamp, media, name, phone, email]);
       } else {
         throw e;
       }

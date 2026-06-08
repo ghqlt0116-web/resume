@@ -60,7 +60,7 @@ export async function appendRegistration(data: string[]) {
 
   await sheets.spreadsheets.values.append({
     spreadsheetId: sheetId,
-    range: "Responses!A:D", // Adjust based on columns (Timestamp, Media, Name, Phone)
+    range: "Responses!A:E", // Timestamp, Media, Name, Phone, Email
     valueInputOption: "USER_ENTERED",
     requestBody: {
       values: [data],
