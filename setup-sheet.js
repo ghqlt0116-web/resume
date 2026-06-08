@@ -82,7 +82,7 @@ async function setup() {
     console.log('\n🎉 모든 자동 세팅이 성공적으로 완료되었습니다!');
     
   } catch (err) {
-    console.error("❌ 에러 발생:", err.message);
+    console.error("❌ 에러 발생:", err);
   }
 }
 

@@ -104,8 +104,12 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col font-sans">
       {/* Header */}
       <header className="bg-white shadow-sm py-4 px-6 md:px-12 flex items-center">
-        {/* SK Broadband Mock Logo */}
-        <div className="flex items-center gap-2">
+        <img src="/skb-logo.png" alt="SK Broadband" className="h-8 object-contain" onError={(e) => {
+          e.currentTarget.style.display = 'none';
+          e.currentTarget.nextElementSibling?.classList.remove('hidden');
+        }}/>
+        {/* Fallback if image not found */}
+        <div className="hidden flex items-center gap-2">
           <div className="w-8 h-8 bg-[#ea002c] rounded-bl-xl rounded-tr-xl"></div>
           <span className="text-xl font-bold tracking-tighter text-gray-900">
             SK<span className="text-[#ea002c]">broadband</span>
@@ -118,8 +122,13 @@ export default function Home() {
         <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12 border border-gray-100/50 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#ea002c] to-[#f96025]"></div>
           
-          <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-6 leading-tight whitespace-pre-wrap">
-            {settings.EventName}
+          <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-6 leading-tight whitespace-pre-wrap flex items-center flex-wrap gap-2">
+            <img src="/btv-logo.png" alt="B tv" className="h-10 object-contain inline-block -mt-1" onError={(e) => {
+              e.currentTarget.style.display = 'none';
+              e.currentTarget.nextElementSibling?.classList.remove('hidden');
+            }}/>
+            <span className="hidden text-[#ea002c] font-black">B tv</span>
+            신규 서비스 기자 설명회
           </h1>
           
           <p className="text-gray-600 text-lg leading-relaxed mb-10 whitespace-pre-wrap">
@@ -227,7 +236,16 @@ export default function Home() {
                     type="tel"
                     required
                     value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    onChange={(e) => {
+                      let val = e.target.value.replace(/[^0-9]/g, "");
+                      if (val.length > 3 && val.length <= 7) {
+                        val = val.replace(/(\d{3})(\d+)/, "$1-$2");
+                      } else if (val.length > 7) {
+                        val = val.replace(/(\d{3})(\d{4})(\d+)/, "$1-$2-$3");
+                      }
+                      if (val.length > 13) val = val.substring(0, 13);
+                      setFormData({ ...formData, phone: val });
+                    }}
                     className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#ea002c]/20 focus:border-[#ea002c] transition-all"
                     placeholder="010-0000-0000"
                   />
