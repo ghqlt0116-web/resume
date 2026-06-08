@@ -361,7 +361,7 @@ export default function Home() {
         </div>
       </main>
 
-      <footer className="mt-auto py-8 text-center text-gray-400 text-sm">
+      <footer className="mt-auto py-8 text-center text-gray-400 text-[10px] sm:text-xs md:text-sm tracking-tighter sm:tracking-normal">
         <p>COPYRIGHT © SK BROADBAND CO., LTD. ALL RIGHTS RESERVED.</p>
       </footer>
     </div>
