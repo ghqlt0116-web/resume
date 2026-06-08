@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { appendRegistration } from "@/lib/google-sheets";
+import { appendRegistration, getEventSettings, getCurrentRegistrationCount } from "@/lib/google-sheets";
 
 export async function POST(req: Request) {
   try {
@@ -11,6 +11,20 @@ export async function POST(req: Request) {
         { success: false, error: "Missing required fields" },
         { status: 400 }
       );
+    }
+
+    const settings = await getEventSettings();
+    if (settings && settings.MaxCapacity) {
+      const maxCapacity = parseInt(settings.MaxCapacity, 10);
+      if (!isNaN(maxCapacity)) {
+        const currentCount = await getCurrentRegistrationCount();
+        if (currentCount >= maxCapacity) {
+          return NextResponse.json(
+            { success: false, error: "full" },
+            { status: 403 }
+          );
+        }
+      }
     }
 
     // Generate KST Timestamp

@@ -9,12 +9,14 @@ type EventSettings = {
   EventSchedule: string;
   OpenTimeKST: string;
   CloseTimeKST: string;
+  MaxCapacity?: string;
+  CurrentCount?: number;
 };
 
 export default function Home() {
   const [settings, setSettings] = useState<EventSettings | null>(null);
   const [loading, setLoading] = useState(true);
-  const [status, setStatus] = useState<"loading" | "before" | "active" | "after">("loading");
+  const [status, setStatus] = useState<"loading" | "before" | "active" | "after" | "full">("loading");
 
   const [formData, setFormData] = useState({ media: "", name: "", phone: "" });
   const [submitting, setSubmitting] = useState(false);
@@ -57,6 +59,13 @@ export default function Home() {
       setStatus("before");
     } else if (currentKst > closeTime) {
       setStatus("after");
+    } else if (data.MaxCapacity && data.CurrentCount !== undefined) {
+      const max = parseInt(data.MaxCapacity, 10);
+      if (!isNaN(max) && data.CurrentCount >= max) {
+        setStatus("full");
+      } else {
+        setStatus("active");
+      }
     } else {
       setStatus("active");
     }
@@ -74,6 +83,9 @@ export default function Home() {
       const json = await res.json();
       if (json.success) {
         setSubmitted(true);
+      } else if (json.error === "full") {
+        alert("죄송합니다. 선착순 모집이 방금 마감되었습니다.");
+        setStatus("full");
       } else {
         alert("신청 중 오류가 발생했습니다. 다시 시도해주세요.");
       }
@@ -207,7 +219,15 @@ export default function Home() {
             <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 text-center">
               <Clock className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-bold text-gray-700 mb-2">신청 마감</h3>
-              <p className="text-gray-500">참석 신청이 모두 마감되었습니다.<br/>관심 가져주셔서 감사합니다.</p>
+              <p className="text-gray-500">참석 신청 기한이 지났습니다.<br/>관심 가져주셔서 감사합니다.</p>
+            </div>
+          )}
+
+          {status === "full" && (
+            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 text-center">
+              <User className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-xl font-bold text-gray-700 mb-2">정원 초과 마감</h3>
+              <p className="text-gray-500">선착순 인원이 모두 차서 접수가 마감되었습니다.<br/>성원에 감사드립니다.</p>
             </div>
           )}
 

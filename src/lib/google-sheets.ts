@@ -67,3 +67,25 @@ export async function appendRegistration(data: string[]) {
     },
   });
 }
+
+export async function getCurrentRegistrationCount() {
+  const sheetId = process.env.GOOGLE_SHEET_ID;
+  if (!sheetId) return 0;
+
+  try {
+    const sheets = await getGoogleSheetsClient();
+    if (!sheets) return 0;
+
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId: sheetId,
+      range: "Responses!A:A", 
+    });
+
+    const rows = response.data.values;
+    // Subtract 1 for the header row
+    return rows && rows.length > 1 ? rows.length - 1 : 0;
+  } catch (error) {
+    console.error("Error fetching registration count:", error);
+    return 0;
+  }
+}

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getEventSettings } from "@/lib/google-sheets";
+import { getEventSettings, getCurrentRegistrationCount } from "@/lib/google-sheets";
 
 // Revalidate every 60 seconds (or 0 for real-time)
 export const revalidate = 0;
@@ -7,6 +7,8 @@ export const revalidate = 0;
 export async function GET() {
   try {
     const settings = await getEventSettings();
+
+    const currentCount = await getCurrentRegistrationCount();
 
     if (!settings) {
       // Fallback data if Google Sheets is not configured or fails
@@ -18,11 +20,13 @@ export async function GET() {
           EventSchedule: "일시: 2026년 9월 10일 (목) 14:00 - 16:00\n장소: SK브로드밴드 본사 1층 수펙스홀",
           OpenTimeKST: "2026-01-01 09:00",
           CloseTimeKST: "2026-12-31 18:00",
+          MaxCapacity: "100",
+          CurrentCount: currentCount
         },
       });
     }
 
-    return NextResponse.json({ success: true, data: settings });
+    return NextResponse.json({ success: true, data: { ...settings, CurrentCount: currentCount } });
   } catch (error) {
     console.error("API error:", error);
     return NextResponse.json(
