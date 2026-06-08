@@ -262,7 +262,7 @@ export default function Home() {
           )}
 
           {status === "active" && !submitted && (
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6" noValidate>
               <div className="space-y-2">
                 <label className="text-sm font-semibold text-gray-700 ml-1">매체명</label>
                 <div className="relative">
