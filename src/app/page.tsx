@@ -161,7 +161,7 @@ export default function Home() {
                   content = (
                     <>
                       <p className="text-gray-900 font-medium text-base md:text-lg break-keep">{parts[0].trim()}</p>
-                      <p className="text-gray-500 text-sm md:text-base mt-1 break-keep">({parts.slice(1).join('(')}</p>
+                      <p className="text-gray-500 text-sm md:text-base mt-1 break-keep">({parts.slice(1).join('(').replace(/-/g, '\u2011')}</p>
                     </>
                   );
                 }
