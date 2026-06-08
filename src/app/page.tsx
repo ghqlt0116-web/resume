@@ -200,8 +200,8 @@ export default function Home() {
         {/* Right Column: Registration Form */}
         <div className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 md:p-12 border border-gray-100/50">
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">참석 신청</h2>
-            <p className="text-gray-500">아래 정보를 입력하여 행사 참석을 신청해 주세요.</p>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">참가 신청</h2>
+            <p className="text-gray-500">아래 정보를 입력하여 행사 참가를 신청해 주세요.</p>
           </div>
 
           {status === "before" && (
@@ -219,7 +219,7 @@ export default function Home() {
             <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 text-center">
               <Clock className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-bold text-gray-700 mb-2">신청 마감</h3>
-              <p className="text-gray-500">참석 신청 기한이 지났습니다.<br/>관심 가져주셔서 감사합니다.</p>
+              <p className="text-gray-500">참가 신청 기한이 지났습니다.<br/>관심 가져주셔서 감사합니다.</p>
             </div>
           )}
 
@@ -237,7 +237,7 @@ export default function Home() {
                 <Send className="w-8 h-8" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">신청 완료</h3>
-              <p className="text-green-700">참석 신청이 성공적으로 접수되었습니다.</p>
+              <p className="text-green-700">참가 신청이 성공적으로 접수되었습니다.</p>
             </div>
           )}
 
