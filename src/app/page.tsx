@@ -218,13 +218,7 @@ export default function Home() {
         <div className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 md:p-12 border border-gray-100/50">
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">참가 신청</h2>
-            <p className="text-gray-500">아래 양식을 작성하여 참가 신청을 해주세요.</p>
-            <div className="mt-4 p-4 bg-red-50/50 rounded-xl border border-red-100">
-              <p className="text-[13px] sm:text-sm text-gray-600 leading-relaxed break-keep">
-                <span className="text-[#ea002c] font-bold mr-1">※</span> 
-                행사장 공간이 한정된 관계로, 신청 인원이 수용 규모를 초과할 경우 신청이 마감될 수 있는 점 미리 양해 부탁드립니다.
-              </p>
-            </div>
+            <p className="text-gray-500">아래 정보를 입력하신 뒤 신청하기를 눌러주세요.</p>
           </div>
 
           {status === "before" && (
@@ -365,6 +359,12 @@ export default function Home() {
                   </>
                 )}
               </button>
+              
+              <div className="text-center pt-2">
+                <p className="text-xs text-gray-400 break-keep">
+                  * 행사장 공간이 한정된 관계로, 수용 인원 초과 시 신청이 조기 마감될 수 있습니다.
+                </p>
+              </div>
             </form>
           )}
         </div>
