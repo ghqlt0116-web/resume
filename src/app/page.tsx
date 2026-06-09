@@ -157,7 +157,7 @@ export default function Home() {
               e.currentTarget.nextElementSibling?.classList.remove('hidden');
             }}/>
             <span className="hidden text-[#ea002c] font-black">B tv</span>
-            신규 서비스 기자 설명회
+            신규 서비스 <span className="whitespace-nowrap">기자 설명회</span>
           </h1>
           
           <p className="text-gray-600 text-base md:text-lg leading-relaxed mb-10 whitespace-pre-wrap break-keep">
@@ -218,7 +218,13 @@ export default function Home() {
         <div className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 md:p-12 border border-gray-100/50">
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">참가 신청</h2>
-            <p className="text-gray-500">아래 정보를 입력하여 참가를 신청해 주세요.</p>
+            <p className="text-gray-500">아래 양식을 작성하여 참가 신청을 해주세요.</p>
+            <div className="mt-4 p-4 bg-red-50/50 rounded-xl border border-red-100">
+              <p className="text-[13px] sm:text-sm text-gray-600 leading-relaxed break-keep">
+                <span className="text-[#ea002c] font-bold mr-1">※</span> 
+                행사장 공간이 한정된 관계로, 신청 인원이 수용 규모를 초과할 경우 신청이 마감될 수 있는 점 미리 양해 부탁드립니다.
+              </p>
+            </div>
           </div>
 
           {status === "before" && (
@@ -242,11 +248,14 @@ export default function Home() {
 
           {status === "full" && (
             <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 text-center">
-              <User className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-gray-700 mb-2">정원 초과 마감</h3>
-              <p className="text-gray-500 break-keep">
-                신청 가능 인원이 초과되어 접수가 마감되었습니다.<br/>
-                추가 문의는 SK브로드밴드 PR실로 부탁드립니다.
+              <User className="w-12 h-12 text-gray-400 mx-auto mb-5" />
+              <h3 className="text-xl font-bold text-gray-800 mb-4">신청이 마감되었습니다</h3>
+              <p className="text-gray-600 break-keep leading-relaxed text-sm sm:text-base px-2">
+                이번 설명회에 예상보다 많은 기자님들께서 관심을 가져 주셔서<br className="hidden md:block"/>
+                행사장 수용 가능 인원을 초과해 부득이하게 <br className="hidden sm:block md:hidden"/>신청 접수를 마감하게 되었습니다.
+              </p>
+              <p className="text-gray-600 break-keep leading-relaxed mt-4 font-medium text-sm sm:text-base">
+                너른 양해 부탁드립니다.
               </p>
             </div>
           )}
