@@ -219,7 +219,7 @@ export default function Home() {
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">참가 신청</h2>
             <p className="text-sm text-gray-400 break-keep mt-1">
-              * 공간이 한정되어 신청 인원이 수용 규모를 초과할 경우 마감될 수 있는 점 양해 부탁드립니다.
+              공간이 한정되어 신청 인원이 수용 규모를 초과할 경우 마감될 수 있는 점 양해 부탁드립니다.
             </p>
           </div>
 
