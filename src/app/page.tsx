@@ -250,8 +250,11 @@ export default function Home() {
               <User className="w-12 h-12 text-gray-400 mx-auto mb-5" />
               <h3 className="text-xl font-bold text-gray-800 mb-4">신청이 마감되었습니다</h3>
               <p className="text-gray-600 break-keep leading-relaxed text-sm sm:text-base px-2">
-                이번 설명회에 예상보다 많은 기자님들께서 관심을 가져 주셔서<br className="hidden md:block"/>
-                행사장 수용 가능 인원을 초과해 부득이하게 <br className="hidden sm:block md:hidden"/>신청 접수를 마감하게 되었습니다.
+                이번 설명회에 예상보다 많은 기자님들께서 관심을 가져 주셔서{" "}
+                <br className="hidden md:block"/>
+                행사장 수용 가능 인원을 초과해 부득이하게{" "}
+                <br className="hidden sm:block md:hidden"/>
+                신청 접수를 마감하게 되었습니다.
               </p>
               <p className="text-gray-600 break-keep leading-relaxed mt-4 font-medium text-sm sm:text-base">
                 너른 양해 부탁드립니다.
