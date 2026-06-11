@@ -123,8 +123,11 @@ export default function Home() {
 
   if (!settings) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 text-gray-500">
-        행사 정보를 불러올 수 없습니다.
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+        <div className="text-center bg-white p-8 rounded-3xl shadow-xl border border-gray-100 max-w-md w-full">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 break-keep">현재 접속자가 많아 로딩이 지연되고 있습니다.</h2>
+          <p className="text-gray-500 break-keep">잠시 후 새로고침(F5)을 눌러 다시 시도해 주세요.</p>
+        </div>
       </div>
     );
   }
