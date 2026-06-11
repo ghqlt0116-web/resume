@@ -78,7 +78,7 @@ export async function getCurrentRegistrationCount() {
 
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: sheetId,
-      range: "Responses!A:A", 
+      range: "Responses!A:E", 
     });
 
     const rows = response.data.values;
